@@ -23,16 +23,9 @@ def post_reviews(payload: UserStatsCreate):
     try:
         response = (
             supabase.table("user_stats")
-            .insert(payload.model_dump(mode="json"))
+            .upsert(payload.model_dump(mode="json"), on_conflict="user_id")
             .execute()
         )
-
-        if not response.data:
-            raise HTTPException(
-                status_code=400, detail="Failed to insert into Supabase"
-            )
-
-        return {"message": "Review stats saved successfully", "data": response.data[0]}
-
+        return {"message": "Review stats saved successfully", "data": response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
