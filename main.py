@@ -11,10 +11,10 @@ class UserStatsCreate(BaseModel):
     reviews_done: int
 
 
-@app.get("/reviews/{id}")
-def get_reviews(id: int):
+@app.get("/reviews/{user_id}")
+def get_reviews(user_id: int):
     """Fetch all rows from the 'reviews_done' table in Supabase for a user"""
-    response = supabase.table("user_stats").select("*").eq("id", id).execute()
+    response = supabase.table("user_stats").select("*").eq("user_id", user_id).execute()
     return {"data": response.data}
 
 
